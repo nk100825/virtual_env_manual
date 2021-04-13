@@ -182,24 +182,17 @@ laravel 6.20
 
 ### 参考したサイト
 ```
-[【 rpm 】コマンド（基礎編）――RPMパッケージをインストールする／アンインストールする]
-(https://www.atmarkit.co.jp/ait/articles/1609/13/news024.html)
+[【 rpm 】コマンド（基礎編）――RPMパッケージをインストールする／アンインストールする](https://www.atmarkit.co.jp/ait/articles/1609/13/news024.html)
 
-[CentOSにEPEL リポジトリを追加する]
-(https://www.websec-room.com/2014/01/15/1535#:~:text=EPEL%20%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%81%A8%E3%81%AF%E3%80%81CentOS,%E3%82%82%E3%81%AE%E3%81%AB%E3%81%AA%E3%81%A3%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99%E3%80%82)
+[CentOSにEPEL リポジトリを追加する](https://www.websec-room.com/2014/01/15/1535#:~:text=EPEL%20%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%81%A8%E3%81%AF%E3%80%81CentOS,%E3%82%82%E3%81%AE%E3%81%AB%E3%81%AA%E3%81%A3%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99%E3%80%82)
 
-[CentOS 7 に PHP 7.2 を yum でインストールする手順]
-(https://weblabo.oscasierra.net/centos7-php72-install/)
+[CentOS 7 に PHP 7.2 を yum でインストールする手順](https://weblabo.oscasierra.net/centos7-php72-install/)
 
-[ sudo 】コマンド――スーパーユーザー（rootユーザー）の権限でコマンドを実行する]
-(https://www.atmarkit.co.jp/ait/articles/1611/28/news036.html)
+[ sudoコマンド――スーパーユーザー（rootユーザー）の権限でコマンドを実行する](https://www.atmarkit.co.jp/ait/articles/1611/28/news036.html)
 
-[yumとは？コマンドの使い方やリポジトリの指定、追加、一覧、rpmの違いなど]
-(https://kitsune.blog/yum-summary#yum%E3%81%A8%E3%81%AF
+[yumとは？コマンドの使い方やリポジトリの指定、追加、一覧、rpmの違いなど](https://kitsune.blog/yum-summary#yum%E3%81%A8%E3%81%AF
 https://www.atmarkit.co.jp/ait/articles/1609/06/news023.html)
 
-[Linux系OSのパッケージ管理システム（rpmやyum）及びリポジトリ（epel）について]
-(https://rainbow-engine.com/intro-yum-rpm-epel/)
+[Linux系OSのパッケージ管理システム（rpmやyum）及びリポジトリ（epel）について](https://rainbow-engine.com/intro-yum-rpm-epel/)
 
-[[PHP] Composerをインストールする方法]
-(https://webbibouroku.com/Blog/Article/php-composer-setup)
+[[PHP] Composerをインストールする方法](https://webbibouroku.com/Blog/Article/php-composer-setup)
