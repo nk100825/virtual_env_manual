@@ -29,11 +29,17 @@
 
 |  コマンド   | コマンド概要 |
 |   ----   |    ----    |
-| yum |   CeontOSで利用されるパッケージ管理システム   |
+|   yum  |   CeontOSで利用されるパッケージ管理システム   |
 |  wget  |  wget URLで指定したURLのファイルをダウンロード、、保存が出来る。  |
 |  rpm   |   RPM（Red Hat Package Manager）パッケージ”を扱うことができるパッケージ管理コマンド。パッケージ個々の情報を細かく管理できる  |
-|   EPEL  |  CentOS標準のリポジトリでは提供されていないパッケージを、yum コマンドでインストールすることを可能にするリポジトリ  |
+
+|   yumのオプション  | 概要 |
+|   ----   |    ----    |
 |   -y    |   全ての問い合わせに「yes」で応答したものとして実行する   |
+
+|   その他  | 概要 |
+|   ----   |    ----    |
+|   EPEL  |  CentOS標準のリポジトリでは提供されていないパッケージを、yum コマンドでインストールすることを可能にするリポジトリ  |
 
 ## vagrantのインストール
 ```shell
@@ -193,7 +199,7 @@ sudo systemctl start nginx
 
 ## laravelの起動
 ```shell
-# ホストOS上で入力してください。
+# ゲストOS[vagrant@localhost ~]
 sudo vi /etc/nginx/conf.d/default.conf
 
 /etc/nginx/conf.d ディレクトリ下の default.conf ファイルが設定ファイルとなる
@@ -216,10 +222,10 @@ server {
   # 追記
   index  index.html index.htm index.php;
 ```
-rootとはnginxのドキュメントルートの指定。（初めに読み込むディレクトリーの指定）
+rootとは、nginxのドキュメントルートの指定。（初めに読み込むディレクトリーの指定）
 vagrantのlaravel_appのpublicを読み込みますよと指定してあげる。
 
-リクエストURIのパスが"/public/"のときにindex.htmlというファイルが存在すれば、"/public/index.html"に内部リダイレクトする。
+indexとは、リクエストURIのパスが"/public/"のときにindex.htmlというファイルが存在すれば、"/public/index.html"に内部リダイレクトする。
 指定したindex.〇〇が初めに読み込まれる。
 
 ## DB（mysql）のインストール
@@ -274,9 +280,7 @@ mysql > set password = "新たなpassword";
 ```shell
 $ sudo vi /etc/my.cnf
 ```
-テキストの変更
-
-
+mysqlのパスワードの変更
 ```shell
 [mysqld]
 # read_rnd_buffer_size = 2M
@@ -286,21 +290,19 @@ socket=/var/lib/mysql/mysql.sock
 # 下記の一行を追加
 validate-password=OFF
 ```
-## migrateの設定
-```shell
-# ホストOS上で入力してください。
-ls -a
- # 隠しファイルを見る
- ```
 mysqlを再起動
 ```shell
 $ sudo systemctl restart mysqld
 ```
 
-下記のように設定する
+環境変数の設定
 ```shell
- # マイグレーション実行
+# ゲストOS[vagrant@localhost ~]$
+ls -a
+ # 隠しファイルを見る
 vi .env
+
+# 下記のように設定する
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -308,11 +310,12 @@ DB_DATABASE=laravel_app
 DB_USERNAME=root
 DB_PASSWORD=
 
+# migrasionの実行
 php artisan migrate
 ```
 ## laravel/ui というパッケージのインストール
-```
-ホストOS上で入力してください。
+```shell
+# ゲストOS[vagrant@localhost ~]$
 composer require laravel/ui "^1.0" --dev
 php artisan ui vue --auth
 ```
