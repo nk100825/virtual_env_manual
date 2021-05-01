@@ -159,6 +159,11 @@ sudo mv composer.phar /usr/local/bin/composer
  # composerのバージョンを確認
 composer -v
 ```
+php -r "unlink('composer-setup.php');"とは<br>
+composer-setup.phpのハッシュ値とオリジナルファイルのハッシュ値を比較しているのですが､オリジナルファイルのハッシュ値は､コマンド内に文字列でべた書きされている。
+Composerがバージョンアップすれば､composer-setup.phpも更新されます｡
+composer-setup.phpが更新されれば当然ハッシュ値は変わり、
+オリジナルファイルのハッシュ値をべた書きしており、Composerがバージョンアップしてしまうとインストールコマンドとして動いてはくれないためunlinkコマンドで消去｡
 
 ## laravelのインストール
 ```shell
