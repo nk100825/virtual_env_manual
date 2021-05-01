@@ -8,10 +8,11 @@
 5. Vagrantの起動
 6. phpのインストール
 7. composerの導入
-8. nginx(Apache)の設定ファイルの導入、起動
-9. laravelの導入、起動
-10. DB(mysql)のインストール
-11. laravelの認証実装
+8. laravelのインストール
+9. nginx(Apache)の設定ファイルの導入、起動
+10. laravelの起動
+11. DB(mysql)のインストール
+12. laravel/ui というパッケージのインストール
 
 
 ## バージョン
@@ -19,44 +20,44 @@
 |   ----   |    ----    |
 | Composer |   2.0.11   |
 |   PHP    |   7.3.27   |
-|  config  |  centos/7  |
+|    OS    |  centos/7  |
 |  nginx   |   1.19.8   |
 |   mysql  |   5.7.33   |
 |  laravel |    6.20    |
 
 ## コマンド説明
 
-|  ソフト   |  バージョン  |
+|  コマンド   | コマンド概要 |
 |   ----   |    ----    |
 | yum |   CeontOSで利用されるパッケージ管理システム   |
-|   -y    |   全ての問い合わせに「yes」で応答したものとして実行する   |
-|  wget  |  スーパーユーザーの権限が必要なコマンドをsudoコマンド経由で実行される。  |
-|  rpm   |   スーパーユーザーの権限が必要なコマンドをsudoコマンド経由で実行される。   |
+|  wget  |  wget URLで指定したURLのファイルをダウンロード、、保存が出来る。  |
+|  rpm   |   RPM（Red Hat Package Manager）パッケージ”を扱うことができるパッケージ管理コマンド。パッケージ個々の情報を細かく管理できる  |
 |   EPEL  |  CentOS標準のリポジトリでは提供されていないパッケージを、yum コマンドでインストールすることを可能にするリポジトリ  |
+|   -y    |   全ての問い合わせに「yes」で応答したものとして実行する   |
 
 ## vagrantのインストール
 ```shell
-ホストOS
-$ brew install --cask vagrant
+# ホストOS
  # vagrantのインストール
-$ vagrant -v
+$ brew install --cask vagrant
  # Vagrantのバージョンを確認
+$ vagrant -v
+ # 下記のコードが出たらOK
  Vagrant 2.2.14
- #　上記のコードが出たらOK
 ```
 
 ## virtualbox
 ```shell
-ホストOS
-https://www.virtualbox.org/wiki/Download_Old_Builds_6_0
+# ホストOS
 # 公式からインストール
+https://www.virtualbox.org/wiki/Download_Old_Builds_6_0
 ```
 
 
 ## vagrant boxの作成
 Boxをcentos/7に指定してダウンロード
 ```shell
-ホストOS
+#ホストOS
 $ vagrant box add centos/7
 
  1) hyperv
@@ -75,24 +76,24 @@ Successfully added box 'centos/7' (v1902.01) for 'virtualbox'!
 
 ## Vagrantの作業ディレクトリを用意する
 ```shell
-ホストOS
-  $ mkdir ディレクトリー名
+# ホストOS
    # vagrantの作業用ディレクトリを用意する。
-  $ cd vagrant_test
+  $ mkdir ディレクトリー名
    #vagrant_testの直下に移動。
-  $ vagrant init centos/7
+  $ cd vagrant_test
    # centos/7を指定し、仮想マシン初期化
-  $ vagrant box list
+  $ vagrant init centos/7
    # CentOS7のBoxが追加されたか確認
+  $ vagrant box list
 ```
 
 ## Vagrantflieの編集
   ```shell
-ホストOS上で入力してください。
-  config.vm.network "forwarded_port", guest: 80, host: 8080
+# ホストOS上で入力してください。
   # コメントアウトを外す
-  config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.network "forwarded_port", guest: 80, host: 8080
    # コメントアウトを外す
+  config.vm.network "private_network", ip: "192.168.33.10"
 
   config.vm.synced_folder "../data", "/vagrant_data"
     # ↓ 以下に編集
@@ -104,19 +105,19 @@ Successfully added box 'centos/7' (v1902.01) for 'virtualbox'!
 
 ## Vagrantのプラグイン(拡張機能)vagrant-vbguestのインストール
 ```shell
-ホストOS上で入力してください。
-vagrant plugin install vagrant-vbguest
+# ホストOS上で入力してください。
  # インストール
+vagrant plugin install vagrant-vbguest
 
-vagrant plugin list
  # vagrant-vbguestのインストールが完了しているか確認する。
-vagrant ssh
+vagrant plugin list
  # 仮想環境へのアクセス（vagrantfileのあるディレクトリ内で実行）
+vagrant ssh
 
-sudo yum -y update
  # yumのアップデート
-sudo yum -y groupinstall "development tools"
+sudo yum -y update
  # development tools”と導入する名称をインストール
+sudo yum -y groupinstall "development tools"
 ```
 Vagrantには様々なプラグイン(拡張機能)が用意されている.<br>vagrant-vbguest というプラグインをインストール
 <br>
@@ -125,37 +126,37 @@ Vagrantには様々なプラグイン(拡張機能)が用意されている.<br>
 
 ## phpのインストール
 ```shell
-ゲストOS[vagrant@localhost ~]$
-sudo yum -y install epel-release wget
+# ゲストOS[vagrant@localhost ~]$
  # EPEL リポジトリをインストール
-sudo wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+sudo yum -y install epel-release wget
  # 指定のURLをインストール
-sudo rpm -Uvh remi-release-7.rpm
+sudo wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
  # パッケージをアップデート
-sudo yum -y install --enablerepo=remi-php72 php  php-pdophp-mysqlnd php-mbstring php-xml php-fpm php-common php-devel php-mysql unzip
+sudo rpm -Uvh remi-release-7.rpm
  #  PHPアプリケーションを動かす上で必要となるモジュール(拡張機能)をインストールしている。
-php -v
+sudo yum -y install --enablerepo=remi-php73 php  php-pdophp-mysqlnd php-mbstring php-xml php-fpm php-common php-devel php-mysql unzip
  # phpのバージョンを確認
+php -v
 ```
 
 ## composerのインストール
 ```shell
-ゲストOS[vagrant@localhost ~]$
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+# ゲストOS[vagrant@localhost ~]$
  # composerのインストール
-php composer-setup.php
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
  # 実行したディレクトリに、composer-setup.phpがダウンロード
-php -r "unlink('composer-setup.php');"
+php composer-setup.php
  # もう使用しないのでcomposer-setup.phpを削除
-sudo mv composer.phar /usr/local/bin/composer
+php -r "unlink('composer-setup.php');"
  # composer.phar” を “/usr/local/bin/” に移動
-composer -v
+sudo mv composer.phar /usr/local/bin/composer
  # composerのバージョンを確認
+composer -v
 ```
 
-## laravelのインストール、認証実装
+## laravelのインストール
 ```shell
-ゲストOS[vagrant@localhost ~]$
+# ゲストOS[vagrant@localhost ~]$
 composer global require "laravel/installer=~1.1"
 ```
 composerとは、プロジェクトが必要とするライブラリやパッケージを管理し、
@@ -164,10 +165,16 @@ phpの依存管理ツールのこと
 
 ## Nginxのインストール
 ```shell
-ゲストOS[vagrant@localhost ~]$
-sudo vi /etc/yum.repos.d/nginx.repo
+# ゲストOS[vagrant@localhost ~]$
 # viエディタを使用して以下のファイルを作成
+sudo vi /etc/yum.repos.d/nginx.repo
 
+# コードを書き込む前の内容
+[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/mainline/centos/7/$basearch/
+gpgcheck=0
+enabled=1
 
 # コードを書き込む
 [nginx]
@@ -176,43 +183,56 @@ baseurl=https://nginx.org/packages/mainline/centos/\$releasever/\$basearch/
 gpgcheck=0
 enabled=1
 
-sudo yum install -y nginx
  # インストール
-nginx -v
+sudo yum install -y nginx
  # バージョンの確認
-sudo systemctl start nginx
+nginx -v
  # 起動
+sudo systemctl start nginx
 ```
 
-## laravelの導入、起動
+## laravelの起動
 ```shell
-ホストOS上で入力してください。
+# ホストOS上で入力してください。
 sudo vi /etc/nginx/conf.d/default.conf
 
 /etc/nginx/conf.d ディレクトリ下の default.conf ファイルが設定ファイルとなる
 
+# コードを書き込む前のコード
+server {
+  listen       80;
+   # Vagranfileで書いた箇所のipアドレスを記述
+  server_name  192.168.33.19;
+  root ;
+  index  ;
+
 # コードを書き込む
 server {
   listen       80;
-  server_name  192.168.33.10;
    # Vagranfileで書いた箇所のipアドレスを記述
+  server_name  192.168.33.10;
+  # 追記
   root /vagrant/laravel_app/public;
   # 追記
   index  index.html index.htm index.php;
-  # 追記
 ```
+rootとはnginxのドキュメントルートの指定。（初めに読み込むディレクトリーの指定）
+vagrantのlaravel_appのpublicを読み込みますよと指定してあげる。
+
+リクエストURIのパスが"/public/"のときにindex.htmlというファイルが存在すれば、"/public/index.html"に内部リダイレクトする。
+指定したindex.〇〇が初めに読み込まれる。
 
 ## DB（mysql）のインストール
 ```shell
-ゲストOS[vagrant@localhost ~]$
-sudo wget https://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+# ゲストOS[vagrant@localhost ~]$
 # 指定したURL,https://dev.mysql.com/get/のrpmファイルにwgetで権限を与える
-sudo rpm -Uvh mysql57-community-release-el7-7.noarch.rpm
+sudo wget https://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
 # mysql-community-serverのアップデート
-sudo yum install -y mysql-community-server
+sudo rpm -Uvh mysql57-community-release-el7-7.noarch.rpm
  # mysql-community-serverのインストール
-mysql --version
+sudo yum install -y mysql-community-server
 # mysqlのバージョンの確認
+mysql --version
 ```
 
 versionの確認ができましたらインストール完了です。
@@ -220,11 +240,11 @@ versionの確認ができましたらインストール完了です。
 
 ## mysqlの起動
  ```shell
-ゲストOS[vagrant@localhost ~]$
-sudo systemctl start mysqld
+# ゲストOS[vagrant@localhost ~]$
  # Mysqlの起動
-mysql -u root -p
+sudo systemctl start mysqld
  # mysqlのログイン
+mysql -u root -p
 ```
 今回はデフォルトでrootにパスワードが設定されてしまっています。
 まずはpasswordを調べ、接続しpassswordの再設定を行っていく必要があります。
@@ -254,15 +274,11 @@ mysql > set password = "新たなpassword";
 ```shell
 $ sudo vi /etc/my.cnf
 ```
-
 テキストの変更
+
+
 ```shell
-# 省略
-
 [mysqld]
-
-# 省略
-
 # read_rnd_buffer_size = 2M
 datadir=/var/lib/mysql
 socket=/var/lib/mysql/mysql.sock
@@ -272,7 +288,7 @@ validate-password=OFF
 ```
 ## migrateの設定
 ```shell
-ホストOS上で入力してください。
+# ホストOS上で入力してください。
 ls -a
  # 隠しファイルを見る
  ```
@@ -283,6 +299,7 @@ $ sudo systemctl restart mysqld
 
 下記のように設定する
 ```shell
+ # マイグレーション実行
 vi .env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -292,19 +309,18 @@ DB_USERNAME=root
 DB_PASSWORD=
 
 php artisan migrate
- # マイグレーション実行
 ```
-
-## laravelprojectのインストール
+## laravel/ui というパッケージのインストール
 ```
 ホストOS上で入力してください。
 composer require laravel/ui "^1.0" --dev
 php artisan ui vue --auth
 ```
 
+
 ## 環境構築の所感
 - 仮想環境の便利さとエラーコードの調べ方について学びました。
-プロジェクトを開発する場合、環境構築をすることによって失敗しても再度作り直すことも可能、全てコマンドでパッケージや拡張機能などインストール、ファイルやディレクトリの作成、削除、移動なども可能でとても便利だと思いました。
+プロジェクトを開発する場合、仮想環境自体が作り直し可能な性質を持っており、 yumだったりcomposer、wgetコマンドでパッケージや拡張機能などインストール、ファイルやディレクトリの作成、削除、移動なども可能でとても便利だと思いました。
 
 - 一個のミスでエラーが出ることと、どこのエラーが出てるか、エラーの調べ方がとても大変でした。
 エラー文を翻訳したり、一個一個の単語を調べたり、何のコマンドで何のエラーが出てるかを理解することが少し出来るようになった気がします。
