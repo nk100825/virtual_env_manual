@@ -26,7 +26,6 @@
 |  laravel |    6.20    |
 
 ## コマンド説明
-
 |  コマンド   | コマンド概要 |
 |   ----   |    ----    |
 |   yum  |   CeontOSで利用されるパッケージ管理システム   |
@@ -53,11 +52,9 @@ $ vagrant -v
 ```
 
 ## virtualbox
-```shell
 # ホストOS
 # 公式からインストール
 https://www.virtualbox.org/wiki/Download_Old_Builds_6_0
-```
 
 
 ## vagrant boxの作成
@@ -83,27 +80,29 @@ Successfully added box 'centos/7' (v1902.01) for 'virtualbox'!
 ## Vagrantの作業ディレクトリを用意する
 ```shell
 # ホストOS
-   # vagrantの作業用ディレクトリを用意する。
-  $ mkdir ディレクトリー名
-   #vagrant_testの直下に移動。
-  $ cd vagrant_test
-   # centos/7を指定し、仮想マシン初期化
-  $ vagrant init centos/7
-   # CentOS7のBoxが追加されたか確認
-  $ vagrant box list
+ # vagrantの作業用ディレクトリを用意する。
+$ mkdir ディレクトリー名
+ #vagrant_testの直下に移動。
+$ cd vagrant_test
+ # centos/7を指定し、仮想マシン初期化
+$ vagrant init centos/7
+ # CentOS7のBoxが追加されたか確認
+$ vagrant box list
+ #下記のように表示されたらOK
+centos/7 (virtualbox, 2004.01)
 ```
 
 ## Vagrantflieの編集
-  ```shell
+```shell
 # ホストOS上で入力してください。
-  # コメントアウトを外す
-  config.vm.network "forwarded_port", guest: 80, host: 8080
-   # コメントアウトを外す
-  config.vm.network "private_network", ip: "192.168.33.10"
+ # コメントアウトを外す
+config.vm.network "forwarded_port", guest: 80, host: 8080
+ # コメントアウトを外す
+config.vm.network "private_network", ip: "192.168.33.10"
 
-  config.vm.synced_folder "../data", "/vagrant_data"
-    # ↓ 以下に編集
-  config.vm.synced_folder "./", "/vagrant", type:"virtualbox"
+config.vm.synced_folder "../data", "/vagrant_data"
+　　# ↓ 以下に編集
+config.vm.synced_folder "./", "/vagrant", type:"virtualbox"
 ```
 `./` はカレントディレクトリ(vagrant_test)を示しており、ホストOS (Mac or Windows) のvagrant_testディレクトリ内とゲストOS (Vagrant) の `/vagrant` のディレクトリ内をリアルタイムで同期するための設定。
 <br>
@@ -209,25 +208,23 @@ sudo vi /etc/nginx/conf.d/default.conf
 
 /etc/nginx/conf.d ディレクトリ下の default.conf ファイルが設定ファイルとなる
 
-# コードを書き込む前のコード
+# コードを書き込む前の状態
 server {
   listen       80;
-   # Vagranfileで書いた箇所のipアドレスを記述
-  server_name  192.168.33.19;
-  root ;
-  index  ;
+  server_name  localhost;
 
 # コードを書き込む
 server {
   listen       80;
    # Vagranfileで書いた箇所のipアドレスを記述
   server_name  192.168.33.10;
-  # 追記
+   # 下記の２行を追加
   root /vagrant/laravel_app/public;
-  # 追記
   index  index.html index.htm index.php;
 ```
-rootとは、nginxのドキュメントルートの指定。（初めに読み込むディレクトリーの指定）
+rootとは、
+Laravelの処理の起点となるのは、publicディレクトリで、/vagrant/laravel_app/publicといったURLの場合、URLの末尾にファイル名が指定されていないのでこのディレクトリ内のindex.phpが実行される。
+nginxのドキュメントルートの指定。（初めに読み込むディレクトリーの指定）
 vagrantのlaravel_appのpublicを読み込みますよと指定してあげる。
 
 indexとは、リクエストURIのパスが"/public/"のときにindex.htmlというファイルが存在すれば、"/public/index.html"に内部リダイレクトする。
@@ -235,14 +232,14 @@ indexとは、リクエストURIのパスが"/public/"のときにindex.htmlと�
 
 ## DB（mysql）のインストール
 ```shell
-# ゲストOS[vagrant@localhost ~]$
-# 指定したURL,https://dev.mysql.com/get/のrpmファイルにwgetで権限を与える
+ # ゲストOS[vagrant@localhost ~]$
+ # 指定したURL,https://dev.mysql.com/get/のrpmファイルにwgetで権限を与える
 sudo wget https://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
-# mysql-community-serverのアップデート
+ # mysql-community-serverのアップデート
 sudo rpm -Uvh mysql57-community-release-el7-7.noarch.rpm
  # mysql-community-serverのインストール
 sudo yum install -y mysql-community-server
-# mysqlのバージョンの確認
+ # mysqlのバージョンの確認
 mysql --version
 ```
 
@@ -250,7 +247,7 @@ versionの確認ができましたらインストール完了です。
 次にMySQLを起動し接続を行います。
 
 ## mysqlの起動
- ```shell
+```shell
 # ゲストOS[vagrant@localhost ~]$
  # Mysqlの起動
 sudo systemctl start mysqld
@@ -263,7 +260,7 @@ mysql -u root -p
 ## パスワードの再設定
 ```shell
 sudo cat /var/log/mysqld.log | grep 'temporary password'
-  # このコマンドを実行したら下記のように表示されたらOKです
+ # このコマンドを実行したら下記のように表示されたらOKです
 2017-01-01T00:00:00.000000Z 1 [Note] A temporary password is generated for root@localhost: hogehoge
 ```
 hogehoge と記載されている箇所に存在するランダムな文字列がパスワードとなります。
@@ -288,7 +285,7 @@ $ sudo vi /etc/my.cnf
 mysqlのパスワードの変更
 ```shell
 [mysqld]
-# read_rnd_buffer_size = 2M
+ # read_rnd_buffer_size = 2M
 datadir=/var/lib/mysql
 socket=/var/lib/mysql/mysql.sock
 
